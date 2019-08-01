@@ -10,8 +10,9 @@ import plotly.graph_objs as go
 import plotly.offline as pyo
 from flask import Flask
 
-schedule_it = True  # Usually its better to save these in a Config.py file
+schedule_it = False  # Usually its better to save these in a Config.py file
 fake = True
+fn_outputInput_html = os.path.join(os.getcwd(), 'templates', index.html)
 d = datetime.datetime.now().strftime("%Y-%m-%d")
 
 def init_data():
@@ -120,20 +121,20 @@ def init_data():
      </html>
      '''.encode('utf-8', errors='replace').decode('utf-8', errors='replace')
 
-    with open(os.path.join(os.getcwd(), 'templates', index.html), 'w') as f:
+    with open(fn_outputInput_html, 'w') as f:
         f.write(html_string)
 
 
-def init_site(df, fake=True):
+def init_site(fn_html=fn_outputInput_html, fake=True):
     '''
     inputs a df of data
-    :return: html page as index.html
+    :return: html page as /templates/index.html
     '''
 
 
     @app.route('/', endpoint='funct1' + d)  # Need to rename the endpoint each time otherwise updates will fail
     def first_func():
-        return html_string
+        return render_template(fn_html)
 
     @app.route('/egg', endpoint='funct2' + d)
     def first_func():
